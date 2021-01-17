@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="restoranti-im" />
+        <module name="projekti-im" />
       </profile>
     </annotationProcessing>
   </component>
