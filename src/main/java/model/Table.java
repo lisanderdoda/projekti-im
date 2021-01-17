@@ -1,9 +1,13 @@
 package model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -29,6 +33,10 @@ private String name;
     private Boolean isDeleted;
     @Column(name = "created_on")
     private LocalDateTime createdOn;
+    @OneToMany(mappedBy = "table")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Order> orders= new HashSet<>();
 
 
 }
