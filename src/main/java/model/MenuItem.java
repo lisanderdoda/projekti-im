@@ -1,12 +1,15 @@
 package model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.hibernate.annotations.Fetch;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "menu_items")
@@ -32,4 +35,13 @@ public class MenuItem {
     private Boolean isDeleted;
     @Column(name = "created_on")
     private LocalDateTime createdOn;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Category category;
+    @OneToMany(mappedBy = "menuItem")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<OrdersItems> ordersItems= new HashSet<>();
 }

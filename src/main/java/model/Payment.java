@@ -1,10 +1,14 @@
 package model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "payments")
@@ -18,9 +22,7 @@ private Integer id;
     private String paymentType;
 
 
-    @Column(name = "number_of_seats")
-    private Integer numberOfSeats;
-    private String state;
+
     @Column(name = "created_by")
     private Integer createdBy;
     @Column(name = "modified_on")
@@ -31,6 +33,10 @@ private Integer id;
     private Boolean isDeleted;
     @Column(name = "created_on")
     private LocalDateTime createdOn;
+    @OneToMany(mappedBy = "payment")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Order> orders = new HashSet<>();
 
 
 }

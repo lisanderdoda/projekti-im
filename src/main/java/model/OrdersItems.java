@@ -1,6 +1,8 @@
 package model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.persistence.Table;
@@ -26,6 +28,17 @@ public class OrdersItems {
     private boolean isDeleted;
     @Column(name = "created_on")
     private LocalDate createdOn;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "food_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private MenuItem menuItem;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Order order;
+
 
 
 }

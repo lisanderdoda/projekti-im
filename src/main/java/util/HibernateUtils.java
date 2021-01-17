@@ -1,5 +1,6 @@
 package util;
 
+import model.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -14,6 +15,13 @@ public class HibernateUtils {
             if(sessionFactory == null){
                 try {
                     Configuration configuration = new Configuration();
+                    configuration.addAnnotatedClass(Category.class);
+                    configuration.addAnnotatedClass(Employee.class);
+                    configuration.addAnnotatedClass(MenuItem.class);
+                    configuration.addAnnotatedClass(Order.class);
+                    configuration.addAnnotatedClass(OrdersItems.class);
+                    configuration.addAnnotatedClass(Payment.class);
+                    configuration.addAnnotatedClass(Table.class);
 
 
 
