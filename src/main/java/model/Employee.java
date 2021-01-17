@@ -3,6 +3,7 @@ package model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Date;
 
