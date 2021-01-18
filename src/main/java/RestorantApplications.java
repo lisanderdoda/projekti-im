@@ -1,14 +1,15 @@
-import org.hibernate.Session;
-import util.HibernateUtils;
-
-import javax.persistence.Query;
+import repository.EmployeeRepository;
+import util.EmployeeUtils;
 
 public class RestorantApplications {
 
     public static void main(String[] args) {
 
-        Session session=HibernateUtils.getSessionFactory().openSession();
+        System.out.println("Mireserdhe");
+        EmployeeUtils employeeUtils = new EmployeeUtils();
+        // vendos nr per cilen kategori te logohesh
 
-        Query query = session.createQuery("from Employee ");
+        employeeUtils.login();
+
     }
 }
