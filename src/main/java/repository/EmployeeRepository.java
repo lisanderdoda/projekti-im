@@ -20,7 +20,6 @@ public class EmployeeRepository {
         employee.setFirstName(name);
         employee.setCreatedBy(createBy);
         employee.setCreatedOn(LocalDate.now());
-        employee.setDateOfBirth(LocalDate);
         employee.setDeleted(false);
         Session session = HibernateUtils.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
@@ -56,6 +55,6 @@ public class EmployeeRepository {
             System.out.println("punonjesi nuk ekziston ");
             findByName();
         }
-        return employees.get(0);
+
     }
 }
