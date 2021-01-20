@@ -5,7 +5,9 @@ import org.hibernate.Session;
 import util.HibernateUtils;
 
 import javax.persistence.Query;
+import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 public class EmployeeRepository {
 
@@ -27,5 +29,4 @@ public class EmployeeRepository {
 
         return employee;
     }
-
 }
