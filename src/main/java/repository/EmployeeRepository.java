@@ -6,6 +6,9 @@ import org.hibernate.Transaction;
 import util.HibernateUtils;
 
 import javax.persistence.Query;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +47,16 @@ public class EmployeeRepository {
         String username = scanner.nextLine();
         System.out.println("Te vendosi passwordin");
         String password = scanner.nextLine();
+        System.out.println("dita e lindjes(shembull: 2000-01-20");
+        String dateFormat = "yyyy-MM-dd";
+        Date date = null;
+        try {
+            date = new SimpleDateFormat(dateFormat).parse(scanner.nextLine());
+        } catch (ParseException e) {
+            System.out.println("formati i dates i gabuar");
+            e.printStackTrace();
+
+        }
         Employee employee = new Employee();
         employee.setRole(role);
         employee.setFirstName(name);
@@ -53,6 +66,7 @@ public class EmployeeRepository {
         employee.setUsername(username);
         employee.setPassword(password);
         employee.setDeleted(false);
+        employee.setDateOfBirth(date);
         Session session = HibernateUtils.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.save(employee);

@@ -76,5 +76,6 @@ public class MenuItemRepository {
         Query query1 = session.createQuery("from MenuItem m where m.isDeleted=false ");
         List<MenuItem> menuItems = query1.getResultList();
         menuItems.forEach(System.out::println);
+        session.close();
     }
 }
