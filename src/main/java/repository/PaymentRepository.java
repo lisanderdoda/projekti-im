@@ -4,6 +4,7 @@ import model.Payment;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtils;
+import util.ScannerExt;
 
 import javax.persistence.Query;
 import java.time.LocalDateTime;
@@ -11,11 +12,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PaymentRepository {
+    private final ScannerExt scannerExt;
+
+    public PaymentRepository(ScannerExt scannerExt) {
+        this.scannerExt = scannerExt;
+    }
 
     public void createPaymentType(Integer createdBy) {
         System.out.println("Vendosni tipin e pageses qe do te shtoni");
-        Scanner scanner = new Scanner(System.in);
-        String paymantName = scanner.nextLine();
+        String paymantName = this.scannerExt.scanField();
         Payment payment = new Payment();
         payment.setPaymentType(paymantName);
         payment.setCreatedBy(createdBy);
@@ -31,8 +36,7 @@ public class PaymentRepository {
 
     public void deletepaymentType() {
         System.out.println("Vendosni tipin e pageses qe doni te mos egzistoje me:");
-        Scanner scanner = new Scanner(System.in);
-        String paymantName = scanner.nextLine();
+        String paymantName = this.scannerExt.scanField();
         Session session = HibernateUtils.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         Query query = session.createQuery("select p from Payment p where p.paymentType=:paymentName " +

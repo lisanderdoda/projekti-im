@@ -4,9 +4,9 @@ import model.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtils;
+import util.ScannerExt;
 
 import javax.persistence.Query;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -15,6 +15,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class EmployeeRepository {
+    private final ScannerExt scannerExt;
+
+    public EmployeeRepository(ScannerExt scannerExt) {
+        this.scannerExt = scannerExt;
+    }
 
     public Employee login(String user, String pass) {
         Session session = HibernateUtils.getSessionFactory().openSession();
@@ -36,27 +41,20 @@ public class EmployeeRepository {
     }
 
     public void createEmployee(Integer createBy) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Vendosni emerin e punonjesit te ri ");
-        String name = scanner.nextLine();
-        System.out.println("Vendosni mbiemrin");
-        String lastname = scanner.nextLine();
-        System.out.println("vendosni pzicionin qe do kete");
-        String role = scanner.nextLine();
-        System.out.println("Te vendosi username:");
-        String username = scanner.nextLine();
-        System.out.println("Te vendosi passwordin");
-        String password = scanner.nextLine();
-        System.out.println("dita e lindjes(shembull: 2000-01-20");
-        String dateFormat = "yyyy-MM-dd";
-        Date date = null;
-        try {
-            date = new SimpleDateFormat(dateFormat).parse(scanner.nextLine());
-        } catch (ParseException e) {
-            System.out.println("formati i dates i gabuar");
-            e.printStackTrace();
 
-        }
+        System.out.println("Vendosni emerin e punonjesit te ri ");
+        String name = this.scannerExt.scanField();
+        System.out.println("Vendosni mbiemrin");
+        String lastname = this.scannerExt.scanField();
+        System.out.println("vendosni pzicionin qe do kete");
+        String role = this.scannerExt.scanField();
+        System.out.println("Te vendosi username:");
+        String username = this.scannerExt.scanField();
+        System.out.println("Te vendosi passwordin");
+        String password = this.scannerExt.scanField();
+        System.out.println("dita e lindjes(shembull: 2000-01-20");
+        LocalDate localDate = this.scannerExt.scanDateField();
+
         Employee employee = new Employee();
         employee.setRole(role);
         employee.setFirstName(name);
@@ -66,16 +64,17 @@ public class EmployeeRepository {
         employee.setUsername(username);
         employee.setPassword(password);
         employee.setDeleted(false);
-        employee.setDateOfBirth(date);
+        employee.setDateOfBirth(localDate);
         Session session = HibernateUtils.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.save(employee);
         transaction.commit();
+        System.out.println("Punonjesi u shtua");
     }
     public void deleteEmployee() {
         System.out.println("zgjidhni punonjesin qe doni te fshini");
-        Scanner scanner = new Scanner(System.in);
-        String name = scanner.nextLine();
+
+        String name = this.scannerExt.scanField();
         Session session = HibernateUtils.getSessionFactory().openSession();
         Query query = session.createQuery("select e from Employee e where e.firstName=:firstName and e.isDeleted=false ");
         List<Employee> employees = query.getResultList();
@@ -91,9 +90,9 @@ public class EmployeeRepository {
         }
     }
     public Employee findByName() {
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println("vendosni emrin e punonjesit ");
-        String name = scanner.nextLine();
+        String name = this.scannerExt.scanField();
         Session session = HibernateUtils.getSessionFactory().openSession();
         Query query = session.createQuery("select e from  Employee e where e.firstName=:firstName " +
                 "and e.isDeleted=false ");
@@ -106,6 +105,7 @@ public class EmployeeRepository {
         }
         Employee employee = employees.get(0);
         session.close();
+        System.out.println(employee);
         return employee;
     }
 }

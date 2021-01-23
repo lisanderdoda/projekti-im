@@ -22,9 +22,9 @@ public class Category {
     private String name;
     @Column(name = "created_by")
     private Integer createdBy;
-    @Column(name = "modified_on")
+    @Column(name = "last_modified_on")
     private LocalDateTime modifiedOn;
-    @Column(name = "modified_by")
+    @Column(name = "last_modified_by")
     private Integer modifiedBy;
     @Column(name = "is_deleted")
     private Boolean isDeleted;

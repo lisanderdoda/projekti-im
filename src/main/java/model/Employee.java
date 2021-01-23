@@ -24,14 +24,14 @@ public class Employee {
     private String lastName;
     private String role;
     @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private String username;
     private String password;
     @Column(name = "created_by")
     private Integer createdBy;
-    @Column(name = "modified_by")
+    @Column(name = "last_modified_by")
     private Integer modifiedBy;
-    @Column(name = "modified_on")
+    @Column(name = "last_modified_on")
     private LocalDate modifiedOn;
     @Column(name = "is_deleted")
     private boolean isDeleted;
