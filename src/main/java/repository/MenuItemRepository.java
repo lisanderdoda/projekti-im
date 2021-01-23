@@ -6,6 +6,7 @@ import model.MenuItem;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtils;
+import util.ScannerExt;
 
 import javax.persistence.Query;
 import java.time.LocalDateTime;
@@ -14,16 +15,20 @@ import java.util.Scanner;
 
 public class MenuItemRepository {
 
+    private final ScannerExt scannerExt;
+
+    public MenuItemRepository(ScannerExt scannerExt) {
+        this.scannerExt = scannerExt;
+    }
+
+
     public void createMenuItem(Category category, Integer createdBy) {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Vendos emrin e produktit");
-        String name = scanner.nextLine();
+        String name = this.scannerExt.scanField();
         System.out.println("Vendos pershkrimin");
-        String description = scanner.nextLine();
+        String description = this.scannerExt.scanField();
         System.out.println("Vendos cmimin sa do te kushtoj");
-        double price = scanner.nextDouble();
-        System.out.println("Vendos emrin e kategorise qe do i perkasi");
-        String cname= scanner.nextLine();
+        double price = this.scannerExt.scanDoubleField();
 
         Session session = HibernateUtils.getSessionFactory().openSession();
 
@@ -43,33 +48,31 @@ public class MenuItemRepository {
     }
     public void deleteMenuItem(){
 
-       MenuItem menuItem= findByName();
-       Session session = HibernateUtils.getSessionFactory().openSession();
-       Transaction transaction = session.beginTransaction();
-       menuItem.setIsDeleted(true);
-       session.update(menuItem);
-       transaction.commit();
-       session.close();
+        MenuItem menuItem= findByName();
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        menuItem.setIsDeleted(true);
+        session.update(menuItem);
+        transaction.commit();
+        session.close();
         System.out.println("menuja u fshi");
 
     }
     public MenuItem findByName() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Vendos emrin e menus");
-        String name = sc.nextLine();
+
+        System.out.println("Vendos emrin e produktit qe do shtohet ne porosi");
+        String name = this.scannerExt.scanField();
         Session session = HibernateUtils.getSessionFactory().openSession();
         Query query = session.createQuery("select m from MenuItem m where m.name=:name and m.isDeleted=false ");
         query.setParameter("name", name);
         List<MenuItem> menuItems = query.getResultList();
         session.close();
-        if (menuItems.isEmpty()) {
-            System.out.println("Kategoria nuk egziston");
-            session.close();
-            findByName();
+        if (!menuItems.isEmpty()) {
+            MenuItem menuItem = menuItems.get(0);
+            return menuItem;
         }
-        MenuItem menuItem = menuItems.get(0);
-        session.close();
-        return menuItem;
+        System.out.println("Produkti qe vendoset nuk eshte i sakte");
+        return findByName();
     }
     public void showMenu(){
         Session session = HibernateUtils.getSessionFactory().openSession();

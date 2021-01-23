@@ -22,12 +22,13 @@ private String name;
 
     @Column(name = "number_of_seats")
     private Integer numberOfSeats;
-    private String state;
+    @Column(name = "is_occupied")
+    private boolean isOccupied;
     @Column(name = "created_by")
     private Integer createdBy;
-    @Column(name = "modified_on")
+    @Column(name = "last_modified_on")
     private LocalDateTime modifiedOn;
-    @Column(name = "modified_by")
+    @Column(name = "last_modified_by")
     private LocalDateTime modifiedBy;
     @Column(name = "is_deleted")
     private Boolean isDeleted;

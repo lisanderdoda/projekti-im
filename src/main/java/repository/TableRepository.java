@@ -4,6 +4,7 @@ import model.Table;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import util.HibernateUtils;
+import util.ScannerExt;
 
 import javax.persistence.Query;
 import java.time.LocalDateTime;
@@ -11,20 +12,25 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TableRepository {
+    private final ScannerExt scannerExt;
+
+    public TableRepository(ScannerExt scannerExt) {
+        this.scannerExt = scannerExt;
+    }
 
     public void createTable(int createdBy){
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println("vendos emrin identikativ te tavolines se re");
-        String name = scanner.nextLine();
+        String name = this.scannerExt.scanField();
         System.out.println("vendos sa vende ka tavolina");
-        int numberOfSeats = scanner.nextInt();
+        int numberOfSeats = this.scannerExt.scanNumberField();
         Table table = new Table();
         table.setCreatedBy(createdBy);
         table.setCreatedOn(LocalDateTime.now());
         table.setIsDeleted(false);
         table.setName(name);
         table.setNumberOfSeats(numberOfSeats);
-        table.setState("e lire");
+        table.setOccupied(false);
         Session session = HibernateUtils.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
         session.save(table);
@@ -32,11 +38,13 @@ public class TableRepository {
         session.close();
     }
     public Table findTable(){
-        Scanner scanner = new Scanner(System.in);
+
         Session session = HibernateUtils.getSessionFactory().openSession();
-        System.out.println("ne cilen tavoline po merr porosine?");
-        String name = scanner.nextLine();
+        Transaction transaction = session.beginTransaction();
+        System.out.println("Zgjidh nr e tavolines");
+        Integer name = this.scannerExt.scanNumberField();
         Query query = session.createQuery("select t from Table t where t.isDeleted= false and t.name=:name");
+
         query.setParameter("name", name);
         List<Table> tables = query.getResultList();
         if(tables.isEmpty()){
@@ -45,6 +53,9 @@ public class TableRepository {
             findTable();
         }
         Table table = tables.get(0);
+        table.setOccupied(true);
+        session.update(table);
+        transaction.commit();
         session.close();
         return  table;
     }
