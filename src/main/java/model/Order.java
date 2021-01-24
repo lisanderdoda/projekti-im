@@ -15,6 +15,7 @@ import java.util.Set;
 @Data
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_id")
     private Integer orderId;
 

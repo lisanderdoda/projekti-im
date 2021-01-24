@@ -11,7 +11,6 @@ import util.ScannerExt;
 import javax.persistence.Query;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Scanner;
 
 public class OrderItemRepository {
     private final ScannerExt scannerExt;
@@ -42,7 +41,7 @@ public class OrderItemRepository {
         session.close();
 
     }
-    public void totalFromSameOrder (Order order,Integer tableName){
+    public void totalFromSameOrder (Order order,String tableName){
         try {
             Session session = HibernateUtils.getSessionFactory().openSession();
             Query query = session.createQuery("select i from OrdersItems i join i.order o join o.table t " +

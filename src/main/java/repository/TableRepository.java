@@ -9,7 +9,7 @@ import util.ScannerExt;
 import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class TableRepository {
     private final ScannerExt scannerExt;
@@ -41,22 +41,24 @@ public class TableRepository {
 
         Session session = HibernateUtils.getSessionFactory().openSession();
         Transaction transaction = session.beginTransaction();
-        System.out.println("Zgjidh nr e tavolines");
-        Integer name = this.scannerExt.scanNumberField();
+        System.out.println("Zgjidh tavolinen");
+        String name = this.scannerExt.scanField();
         Query query = session.createQuery("select t from Table t where t.isDeleted= false and t.name=:name");
 
         query.setParameter("name", name);
         List<Table> tables = query.getResultList();
-        if(tables.isEmpty()){
+        if(!tables.isEmpty()){
+            Table table = tables.get(0);
+            table.setOccupied(true);
+            session.update(table);
+            transaction.commit();
+            session.close();
+            return  table;
+        }else {
             System.out.println("tavolina nuk u gjend, provo perseri ");
             session.close();
-            findTable();
+           return findTable();
         }
-        Table table = tables.get(0);
-        table.setOccupied(true);
-        session.update(table);
-        transaction.commit();
-        session.close();
-        return  table;
+
     }
 }
