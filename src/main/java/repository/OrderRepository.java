@@ -34,7 +34,7 @@ public class OrderRepository {
         session.close();
         return order;
     }
-    public Order selectOrderOpened(Integer tableName){
+    public Order selectOrderOpened(String tableName){
 
         Session session = HibernateUtils.getSessionFactory().openSession();
         Query query = session.createQuery("select o from Order o join o.table t where o.paidOn is null and t.name=:id");

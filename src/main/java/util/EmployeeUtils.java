@@ -83,51 +83,66 @@ public class EmployeeUtils {
     }
 
     public void showMenuWaiter(Employee employee) {
-        System.out.println("Zgjidh veprimin:\n1- Merr porosi\n2-Merr pagesen\n3-shto dicka ne nje porosi te hapur\n4-dil");
+        System.out.println("Zgjidh veprimin:\n1-Merr porosi\n2-Merr pagesen\n3-shto dicka ne nje porosi te hapur\n4-dil");
         int choise = scannerExt.scanNumberField();
         switch (choise) {
 
             case 1:
-                System.out.println("kamarier " + employee.getFirstName() + " zjgidh tavolinen ku po merret porosia");
-                TableRepository tableRepository = new TableRepository(scannerExt);
-                Table table = tableRepository.findTable();
-                //krijojme order
-                OrderRepository orderRepository = new OrderRepository(scannerExt);
-                Order order = orderRepository.createOrder(employee, table);
-                // krijojme nje orderitem per cdo item qe do porositet ne te njejtin order
-                MenuItemRepository menuItemRepository = new MenuItemRepository(scannerExt);
-                OrderItemRepository orderItemRepository = new OrderItemRepository(scannerExt);
-                boolean a = true;
-                while (a) {
-                    MenuItem menuItem = menuItemRepository.findByName();
-                    orderItemRepository.createOrderItem(order, menuItem, employee.getId());
-                    System.out.println("shtyp \n1 per te vazhduar porosine \n2 nese mjafton me kaq");
-                    Integer number = scannerExt.scanNumberField();
-                    if (number == 1) {
-                        System.out.println("zgjidh produkt qe do i shtohet porosise");
-                    } else {
-                        a = false;
-                        System.out.println("Porosia u mbyll");
-                    }
-                }
+                takeOrder(employee);
                 break;
             case 2:
-                System.out.println("Per cilen tavoline do kryhet pagesa?");
-                int tableName = scannerExt.scanNumberField();
-                OrderRepository orderRepository1 = new OrderRepository(scannerExt);
-                Order order1 = orderRepository1.selectOrderOpened(tableName);
-                System.out.println(order1);
-                OrderItemRepository orderItemRepository1 = new OrderItemRepository(scannerExt);
-                orderItemRepository1.totalFromSameOrder(order1, tableName);
-                orderRepository1.updateOrder(order1);
-                // do shtohet pjesa qe
+                payOrder();
 
                 break;
-
+            case 3:
+                //ne ndertim
+                break;
+            default:
+                break;
 
         }
 
 
+    }
+
+    private void payOrder() {
+        System.out.println("Per cilen tavoline do kryhet pagesa?");
+        String tableName = scannerExt.scanField();
+        OrderRepository orderRepository1 = new OrderRepository(scannerExt);
+        Order order1 = new Order();
+        order1  = orderRepository1.selectOrderOpened(tableName);
+        System.out.println(order1);
+        OrderItemRepository orderItemRepository1 = new OrderItemRepository(scannerExt);
+        orderItemRepository1.totalFromSameOrder(order1, tableName);
+        orderRepository1.updateOrder(order1);
+        // do shtohet pjesa qe
+    }
+
+    private void takeOrder(Employee employee) {
+        System.out.println("kamarier " + employee.getFirstName() + " zjgidh tavolinen ku po merret porosia");
+        TableRepository tableRepository = new TableRepository(scannerExt);
+        Table table = new Table();
+        table= tableRepository.findTable();
+        //krijojme order
+        OrderRepository orderRepository = new OrderRepository(scannerExt);
+        Order order = new Order();
+        order = orderRepository.createOrder(employee, table);
+        // krijojme nje orderitem per cdo item qe do porositet ne te njejtin order
+        MenuItemRepository menuItemRepository = new MenuItemRepository(scannerExt);
+        OrderItemRepository orderItemRepository = new OrderItemRepository(scannerExt);
+        boolean a = true;
+        while (a) {
+            MenuItem menuItem = menuItemRepository.findByName();
+            orderItemRepository.createOrderItem(order, menuItem, employee.getId());
+            System.out.println("shtyp \n1 per te vazhduar porosine \n2 nese mjafton me kaq");
+            Integer number = scannerExt.scanNumberField();
+            if (number == 1) {
+                System.out.println("zgjidh produkt qe do i shtohet porosise");
+            } else {
+                a = false;
+                System.out.println("Porosia u mbyll");
+            }
+        }
     }
 
     public void showMenuChef(Employee employee) {
@@ -138,17 +153,15 @@ public class EmployeeUtils {
         int numri = scannerExt.scanNumberField();
         switch (numri) {
             case 1:
-                int a = 0;  // do zevendesohet pasi te behet klasa employee repository me Id e employeet te loguar
                 CategoryRepository categoryRepository = new CategoryRepository(scannerExt);
-                categoryRepository.createCategory(a);
+                categoryRepository.createCategory(employee.getId());
                 showMenuChef(employee);
                 break;
             case 2:
-                int b = employee.getId(); // e njejta gje si me siper
                 CategoryRepository categoryRepository1 = new CategoryRepository(scannerExt);
                 Category category = categoryRepository1.findByName();
                 MenuItemRepository menuItemRepository = new MenuItemRepository(scannerExt);
-                menuItemRepository.createMenuItem(category, b);
+                menuItemRepository.createMenuItem(category, employee.getId());
                 showMenuChef(employee);
                 break;
             case 3:
@@ -161,6 +174,5 @@ public class EmployeeUtils {
                 showMenuChef(employee);
         }
     }
-
 
 }
