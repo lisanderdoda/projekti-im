@@ -2,6 +2,7 @@ package repository;
 
 import model.Employee;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import util.HibernateUtils;
 import javax.persistence.Query;
 import java.util.List;
@@ -32,14 +33,21 @@ public class EmployeeRepository {
     }
 
     public void addEmployee(Employee employee) {
-
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(employee);
+        transaction.commit();
+        session.close();
     }
-    public void editEmployee(Employee employee){}
+    public void editEmployee(Employee employee){
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(employee);
+        transaction.commit();
+        session.close();
+    }
     public void removeEmployee(String firstname, String lastname) {}
 
-    public Employee findByName() {
-    return null;
-    }
     public List<Employee> listEmployees(){
         Session session = HibernateUtils.getSessionFactory().openSession();
         Query query = session.createQuery("from Employee");
