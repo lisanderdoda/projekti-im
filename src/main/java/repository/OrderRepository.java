@@ -15,13 +15,23 @@ import java.util.List;
 public class OrderRepository {
 
     public void addOrder(Order order) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(order);
+        transaction.commit();
+        session.close();
     }
 
     public Order selctOrderToPay() {
         return null;
     }
 
-    public void editOrder() {
+    public void editOrder(Order order) {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(order);
+        transaction.commit();
+        session.close();
     }
 
     public void removeOrder() {

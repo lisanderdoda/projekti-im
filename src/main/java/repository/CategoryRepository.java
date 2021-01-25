@@ -13,8 +13,20 @@ import java.util.List;
 
 public class CategoryRepository {
 
-   public void addCategory(){}
-   public void editCategory(){}
+   public void addCategory(Category category){
+      Session session = HibernateUtils.getSessionFactory().openSession();
+      Transaction transaction = session.beginTransaction();
+      session.save(category);
+      transaction.commit();
+      session.close();
+   }
+   public void editCategory(Category category){
+      Session session = HibernateUtils.getSessionFactory().openSession();
+      Transaction transaction = session.beginTransaction();
+      session.update(category);
+      transaction.commit();
+      session.close();
+   }
    public void removeCategory(){}
    public Category findByName(String name){
        return null;
