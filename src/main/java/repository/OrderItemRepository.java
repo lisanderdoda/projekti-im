@@ -11,12 +11,14 @@ public class OrderItemRepository {
       Session session= HibernateUtils.getSessionFactory().openSession();
       Transaction transaction=session.beginTransaction();
       session.save(ordersItems);
+      transaction.commit();
       session.close();
    }
    public void editOrderItem(OrdersItems ordersItems){
       Session session=HibernateUtils.getSessionFactory().openSession();
       Transaction transaction=session.beginTransaction();
       session.update(ordersItems);
+      transaction.commit();
       session.close();
    }
    public void removeOrderItem(OrdersItems ordersItems){
