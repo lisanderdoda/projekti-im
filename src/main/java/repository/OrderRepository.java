@@ -34,14 +34,26 @@ public class OrderRepository {
         session.close();
         return order;
     }
-    public Order selectOrderOpened(String tableName){
-
+    public Order selectOrderOpened(){
+        System.out.println("Per cilen tavoline do kryhet pagesa?");
+        String tableName = scannerExt.scanField();
         Session session = HibernateUtils.getSessionFactory().openSession();
-        Query query = session.createQuery("select o from Order o join o.table t where o.paidOn is null and t.name=:id");
-        query.setParameter("id", tableName);
+        Query query = session.createQuery("select o from Order o join o.table t where o.paidOn is null and t.name=:name");
+        query.setParameter("name", tableName);
         List<Order> orders = query.getResultList();
         if(orders.isEmpty()){
-            System.out.println("ja ke fut kot ketu");
+            System.out.println("Tavolina nuk ekziston ose pagesa eshte kryer zgjidh\n" +
+                    "1-per te dal ose 2-per te vendosur nje tavoline tjeter");
+            int choise = scannerExt.scanNumberField();
+             switch (choise){
+
+                 case 2:
+                     session.close();
+                     return selectOrderOpened();
+                default:
+                    session.close();
+                    break;
+             }
         }
         Order order = orders.get(0);
         session.close();

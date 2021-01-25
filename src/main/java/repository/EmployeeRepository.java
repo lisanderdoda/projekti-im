@@ -81,7 +81,6 @@ public class EmployeeRepository {
         if (employees.isEmpty()) {
             System.out.println("punonjesit nuk ekziston");
             session.close();
-            deleteEmployee();
         } else {
             Transaction transaction = session.beginTransaction();
             session.update(employees.get(0));
@@ -101,7 +100,7 @@ public class EmployeeRepository {
         if (employees.isEmpty()) {
             System.out.println("punonjesi nuk ekziston ");
             session.close();
-            findByName();
+            return findByName();
         }
         Employee employee = employees.get(0);
         session.close();

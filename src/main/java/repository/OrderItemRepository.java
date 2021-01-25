@@ -41,19 +41,20 @@ public class OrderItemRepository {
         session.close();
 
     }
-    public void totalFromSameOrder (Order order,String tableName){
+    public void totalFromSameOrder (Order order){
         try {
             Session session = HibernateUtils.getSessionFactory().openSession();
             Query query = session.createQuery("select i from OrdersItems i join i.order o join o.table t " +
                     "where o.id = :orderId and t.name= :tableName");
             query.setParameter("orderId", order.getOrderId());
-            query.setParameter("tableName",tableName);
+            query.setParameter("tableName",order.getTable().getName());
             List<OrdersItems> doubleList = query.getResultList();
             if(doubleList.isEmpty()){
                 System.out.println("shiko me para");
             }
             double sum= 0;
             for(OrdersItems o: doubleList){
+                System.out.println(o.getMenuItem().getName()+"  "+ o.getQuantity()+"x"+o.getMenuItem().getUnitPrice());
                 sum=sum + o.getPrice();
             }
             System.out.println("Totali per tu paguar: "+ sum);
