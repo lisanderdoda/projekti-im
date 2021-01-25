@@ -47,6 +47,7 @@ public class CategoryRepository {
         List<Category> categories = query.getResultList();
         if (categories.isEmpty()) {
             System.out.println("kategoria nuk egziston");
+            session.close();
             deleteCategory();
         } else {
             Transaction transaction = session.beginTransaction();
@@ -64,15 +65,14 @@ public class CategoryRepository {
         Query query = session.createQuery("select c from Category c where c.name=:name and c.isDeleted=false");
         query.setParameter("name", name);
         List<Category> categories = query.getResultList();
-        if (categories.isEmpty()) {
-            System.out.println("Kategoria nuk egziston");
+        if (!categories.isEmpty()) {
+            Category category = categories.get(0);
             session.close();
-            findByName();
+            return category;
         }
-        Category category = categories.get(0);
+        System.out.println("Kategoria nuk egziston");
         session.close();
-
-        return category;
+        return findByName();
     }
 }
 

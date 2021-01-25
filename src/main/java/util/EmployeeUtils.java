@@ -106,14 +106,11 @@ public class EmployeeUtils {
     }
 
     private void payOrder() {
-        System.out.println("Per cilen tavoline do kryhet pagesa?");
-        String tableName = scannerExt.scanField();
+
         OrderRepository orderRepository1 = new OrderRepository(scannerExt);
-        Order order1 = new Order();
-        order1  = orderRepository1.selectOrderOpened(tableName);
-        System.out.println(order1);
+        Order order1 = orderRepository1.selectOrderOpened();
         OrderItemRepository orderItemRepository1 = new OrderItemRepository(scannerExt);
-        orderItemRepository1.totalFromSameOrder(order1, tableName);
+        orderItemRepository1.totalFromSameOrder(order1);
         orderRepository1.updateOrder(order1);
         // do shtohet pjesa qe
     }
