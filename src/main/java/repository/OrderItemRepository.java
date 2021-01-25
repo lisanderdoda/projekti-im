@@ -20,10 +20,7 @@ public class OrderItemRepository {
       session.close();
    }
    public void removeOrderItem(OrdersItems ordersItems){
-      Session session=HibernateUtils.getSessionFactory().openSession();
-      Transaction transaction=session.beginTransaction();
-      session.save(ordersItems);
-      session.close();
+
    }
 
 }

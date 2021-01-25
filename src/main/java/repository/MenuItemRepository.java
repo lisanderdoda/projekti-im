@@ -27,10 +27,7 @@ public class MenuItemRepository {
        session.close();
    }
    public void removeMenuItem(MenuItem menuItem){
-       Session session=HibernateUtils.getSessionFactory().openSession();
-       Transaction transaction=session.beginTransaction();
-       session.save(menuItem);
-       session.close();;
+
    }
    public List<MenuItem> showMenu(){
         Session session = HibernateUtils.getSessionFactory().openSession();
