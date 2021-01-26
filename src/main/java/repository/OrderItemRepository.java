@@ -8,19 +8,23 @@ import util.HibernateUtils;
 
 public class OrderItemRepository {
    public void addOrderItem(OrdersItems ordersItems){
-      Session session = HibernateUtils.getSessionFactory().openSession();
-      Transaction transaction = session.beginTransaction();
+
+      Session session= HibernateUtils.getSessionFactory().openSession();
+      Transaction transaction=session.beginTransaction();
       session.save(ordersItems);
       transaction.commit();
       session.close();
    }
    public void editOrderItem(OrdersItems ordersItems){
-      Session session = HibernateUtils.getSessionFactory().openSession();
-      Transaction transaction = session.beginTransaction();
+
+      Session session=HibernateUtils.getSessionFactory().openSession();
+      Transaction transaction=session.beginTransaction();
       session.update(ordersItems);
       transaction.commit();
       session.close();
+
+   public void removeOrderItem(OrdersItems ordersItems){
+
    }
-   public void removeOrderItem(OrdersItems ordersItems){}
 
 }
