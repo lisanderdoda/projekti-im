@@ -50,6 +50,13 @@ public class EmployeeRepository {
 
     public List<Employee> listEmployees(){
         Session session = HibernateUtils.getSessionFactory().openSession();
+        Query query = session.createQuery("from Employee e where e.isDeleted=false");
+        List<Employee> employeeList = query.getResultList();
+        return employeeList;
+    }
+    // show employye deleted to
+    public List<Employee> listEmployeesAll(){
+        Session session = HibernateUtils.getSessionFactory().openSession();
         Query query = session.createQuery("from Employee");
         List<Employee> employeeList = query.getResultList();
         return employeeList;

@@ -8,4 +8,7 @@ public class MenuItemController {
     public MenuItemController(ScannerExt scannerExt) {
         this.scannerExt = scannerExt;
     }
+
+    public void showMenuItem() {
+    }
 }

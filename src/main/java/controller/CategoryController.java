@@ -8,4 +8,7 @@ public class CategoryController {
     public CategoryController(ScannerExt scannerExt) {
         this.scannerExt = scannerExt;
     }
+
+    public void showCategoryMenu() {
+    }
 }

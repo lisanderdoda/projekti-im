@@ -47,10 +47,38 @@ public class EmployeeController {
                 if(employee.getRole().equals("ADMIN")){
                     System.out.println("Paneli i administratorit!");
                     showAdminMenu();
-                } else {
+                } else if(employee.getRole().equals("kamarier")){
                     System.out.println("Paneli i operatorit!");
                     showOperatorMenu();
+                }else if(employee.getRole().equals("chef")){
+                    System.out.println("Paneli i chef!");
+                    showChefMenu();
                 }
+            }
+        }
+    }
+
+    private void showChefMenu() {
+        boolean logout = true;
+        while (logout) {
+            System.out.println("Zgjidhni nje nga opsionet me poshte!");
+            System.out.println("1.Menaxho Menu!");
+            System.out.println("2.Menaxho Kategori!");
+            System.out.println("3.Logout!");
+
+            Integer choise = this.scannerExt.scanRestrictedFieldNumber(Arrays.asList(1, 2, 3));
+            switch (choise){
+                case 1:
+                    MenuItemController menuItemController = new MenuItemController(scannerExt);
+                    menuItemController.showMenuItem();
+                break;
+                case 2: {
+                    CategoryController categoryController = new CategoryController(scannerExt);
+                    categoryController.showCategoryMenu();
+                    break;
+                }
+                case 3: logout = false; break;
+                default: break;
             }
         }
     }
@@ -153,15 +181,22 @@ public class EmployeeController {
     }
 
     public void editEmployee(){
-        System.out.println("zgjidhni punonjesin qe doni te fshini");
-        System.out.println("Vendosni emrin:");
-        String firstname = scannerExt.scanField();
-        System.out.println("Vendosni emrin:");
+
+        EmployeeRepository employeeRepository = new EmployeeRepository();
+        // per tu ndertuar metode qe merr emplyeet ne nje list ne emplyeRepository
         String lastname = scannerExt.scanField();
-        employeeRepository.removeEmployee(firstname, lastname);
+        System.out.println("Zgjidhni rolin e ri");
+        employeeRepository.editEmployee(null);
     }
 
     public void removeEmployee(){
+        System.out.println("zgjidhni punonjesin qe doni ti ndryshoni rol");
+        System.out.println("Vendosni emrin:");
+        String firstname = scannerExt.scanField();
+        System.out.println("Vendosni mbiemrin:");
+        String lastname = scannerExt.scanField();
+        System.out.println("Zgjidhni rolin e ri");
+        employeeRepository.editEmployee(null);
 
     }
 }
