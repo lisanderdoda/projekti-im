@@ -52,6 +52,7 @@ public class EmployeeRepository {
         Session session = HibernateUtils.getSessionFactory().openSession();
         Query query = session.createQuery("from Employee e where e.isDeleted=false");
         List<Employee> employeeList = query.getResultList();
+        session.close();
         return employeeList;
     }
     // show employye deleted to
@@ -59,6 +60,7 @@ public class EmployeeRepository {
         Session session = HibernateUtils.getSessionFactory().openSession();
         Query query = session.createQuery("from Employee");
         List<Employee> employeeList = query.getResultList();
+        session.close();
         return employeeList;
     }
 }

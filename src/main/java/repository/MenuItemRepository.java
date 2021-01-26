@@ -12,6 +12,15 @@ import java.util.List;
 public class MenuItemRepository {
 
    public void addMenuItem(MenuItem menuItem){
+
+       Session session = HibernateUtils.getSessionFactory().openSession();
+       Transaction transaction = session.beginTransaction();
+       session.save(menuItem);
+       transaction.commit();
+       session.close();
+   }
+   public void editMenuItem(MenuItem menuItem){
+
        Session session=HibernateUtils.getSessionFactory().openSession();
        Transaction transaction=session.beginTransaction();
        session.save(menuItem);
@@ -22,13 +31,15 @@ public class MenuItemRepository {
    public void editMenuItem(MenuItem menuItem){
        Session session=HibernateUtils.getSessionFactory().openSession();
        Transaction transaction=session.beginTransaction();
+
        session.update(menuItem);
        transaction.commit();
        session.close();
-   }
+
    public void removeMenuItem(MenuItem menuItem){
 
    }
+
    public List<MenuItem> showMenu(){
         Session session = HibernateUtils.getSessionFactory().openSession();
         Query query1 = session.createQuery("from MenuItem m where m.isDeleted=false ");
