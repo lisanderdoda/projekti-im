@@ -1,11 +1,15 @@
 package controller;
 
 import model.Employee;
+import model.Table;
 import repository.EmployeeRepository;
 import util.ScannerExt;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class EmployeeController {
     private final ScannerExt scannerExt;
@@ -132,14 +136,18 @@ public class EmployeeController {
             System.out.println("Zgjidhni nje nga opsionet me poshte!");
             System.out.println("1.Shto punonjes!");
             System.out.println("2.Listo punonjesit!");
-            System.out.println("3.Back!");
+            System.out.println("3.Elemino punonjes!");
+            System.out.println("4.Modifiko punonjes!");
+            System.out.println("5.Back!");
 
-            Integer choise = this.scannerExt.scanRestrictedFieldNumber(Arrays.asList(1,2,3));
+            Integer choise = this.scannerExt.scanRestrictedFieldNumber(Arrays.asList(1,2,3,4,5));
 
             switch (choise){
                 case 1: addEmployee(); break;
                 case 2: listEmployees(); break;
-                case 3: goBack = false; break;
+                case 3: removeEmployee(); break;
+                case 4: editEmployee(); break;
+                case 5: goBack = false; break;
                 default: break;
             }
         }
@@ -152,51 +160,82 @@ public class EmployeeController {
     }
 
     public void addEmployee(){
+        Employee employee = new Employee();
         System.out.println("Vendosni emerin e punonjesit te ri ");
         String name = this.scannerExt.scanField();
         System.out.println("Vendosni mbiemrin");
         String lastname = this.scannerExt.scanField();
         System.out.println("vendosni pzicionin qe do kete");
         String role = this.scannerExt.scanField();
+        List<Employee> employeeList = this.employeeRepository.listEmployeesAll();
+        boolean ok = true;
         System.out.println("Te vendosi username:");
-        String username = this.scannerExt.scanField();
+        List<Employee> employees = new ArrayList<>();
+        while (ok){
+
+            String username = this.scannerExt.scanField();
+            employees =employeeList.stream().filter(x->x.getUsername().equals(username))
+                    .collect(Collectors.
+                            toList());
+            if(employees.isEmpty()){
+                employee.setUsername(username);
+                ok=false;
+            }else{
+                System.out.println("Ky Username nuk eshte i disponueshem!");
+                System.out.println("Vendosni nje username tjeter");
+            }
+        }
+
         System.out.println("Te vendosi passwordin");
         String password = this.scannerExt.scanField();
-        System.out.println("dita e lindjes(shembull: 2000-01-20");
+        System.out.println("dita e lindjes(shembull: 20-01-2000");
         LocalDate localDate = this.scannerExt.scanDateField();
-
-        Employee employee = new Employee();
         employee.setRole(role);
         employee.setFirstName(name);
         employee.setLastName(lastname);
         employee.setCreatedBy(getCurrentEmployee().getId());
         employee.setCreatedOn(LocalDate.now());
-        employee.setUsername(username);
         employee.setPassword(password);
         employee.setDeleted(false);
         employee.setDateOfBirth(localDate);
         this.employeeRepository.addEmployee(employee);
 
-
     }
 
     public void editEmployee(){
 
-        EmployeeRepository employeeRepository = new EmployeeRepository();
-        // per tu ndertuar metode qe merr emplyeet ne nje list ne emplyeRepository
-        String lastname = scannerExt.scanField();
-        System.out.println("Zgjidhni rolin e ri");
-        employeeRepository.editEmployee(null);
+        List<Employee> employeeList = this.employeeRepository.listEmployees();
+        int count = 1;
+        List<Integer> integerList = new ArrayList<>();
+
+        System.out.println("Zgjidh punonjesin qe do te ndryshoj rol:");
+        for (Employee e : employeeList) {
+            System.out.println(count + "." + e.getFirstName()+" "+e.getLastName());
+            integerList.add(count);
+            count++;
+        }
+        int choise = scannerExt.scanRestrictedFieldNumber(integerList);
+        Employee employee = employeeList.get(choise - 1);
+        System.out.println("Vendos rolin e ri!");
+        String role = scannerExt.scanField();
+        employee.setRole(role);
+        this.employeeRepository.editEmployee(employee);
     }
 
     public void removeEmployee(){
-        System.out.println("zgjidhni punonjesin qe doni ti ndryshoni rol");
-        System.out.println("Vendosni emrin:");
-        String firstname = scannerExt.scanField();
-        System.out.println("Vendosni mbiemrin:");
-        String lastname = scannerExt.scanField();
-        System.out.println("Zgjidhni rolin e ri");
-        employeeRepository.editEmployee(null);
+      List<Employee> employeeList = this.employeeRepository.listEmployees();
+        int count = 1;
+        List<Integer> integerList = new ArrayList<>();
 
+        System.out.println("Zgjidh punonjesin qe do te hiqet:");
+        for (Employee e : employeeList) {
+            System.out.println(count + "." + e.getFirstName()+" "+e.getLastName());
+            integerList.add(count);
+            count++;
+        }
+        int choise = scannerExt.scanRestrictedFieldNumber(integerList);
+        Employee employee = employeeList.get(choise - 1);
+        employee.setDeleted(true);
+        this.employeeRepository.editEmployee(employee);
     }
 }
