@@ -1,5 +1,6 @@
 package controller;
 
+import model.Employee;
 import model.Table;
 import repository.EmployeeRepository;
 import repository.TableRepository;
@@ -14,9 +15,13 @@ import java.util.stream.Collectors;
 public class TableController {
 
     private final ScannerExt scannerExt;
+    private Employee employee;
+    private TableRepository tableRepository;
 
-    public TableController(ScannerExt scannerExt) {
+    public TableController(ScannerExt scannerExt, Employee employee) {
         this.scannerExt = scannerExt;
+        this. employee=employee;
+        tableRepository=new TableRepository();
     }
 
     public void showMainMenu() {
@@ -54,7 +59,6 @@ public class TableController {
 
     private void removeTable() {
 
-        TableRepository tableRepository = new TableRepository();
         List<Table> tableList = tableRepository.tableList();
         int count = 1;
         List<Integer> integerList = new ArrayList<>();
@@ -68,6 +72,8 @@ public class TableController {
         int choise = scannerExt.scanRestrictedFieldNumber(integerList);
         Table table = tableList.get(choise - 1);
         table.setIsDeleted(true);
+        table.setModifiedBy(employee.getId());
+        table.setModifiedOn(LocalDateTime.now());
         tableRepository.editTable(table);
 
     }
@@ -105,5 +111,22 @@ public class TableController {
 
         tableRepository.addTable(table);
 
+    }
+
+    public Table selctTable() {
+        TableRepository tableRepository = new TableRepository();
+        List<Table> tableList = tableRepository.tableList();
+        int count = 1;
+        List<Integer> integerList = new ArrayList<>();
+
+        System.out.println("Zgjidh tavolinen ku po meret porosia");
+        for (Table t : tableList) {
+            System.out.println(count + "." + t.getName());
+            integerList.add(count);
+            count++;
+        }
+        int choise = scannerExt.scanRestrictedFieldNumber(integerList);
+        Table table = tableList.get(choise - 1);
+        return table;
     }
 }

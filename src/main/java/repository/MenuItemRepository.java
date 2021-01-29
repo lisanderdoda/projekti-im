@@ -1,5 +1,6 @@
 package repository;
 
+import model.Category;
 import model.MenuItem;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -31,5 +32,26 @@ public class MenuItemRepository {
         List<MenuItem> menuItems = query1.getResultList();
         session.close();
         return menuItems;
+    }
+
+    public List<MenuItem> listMenuItems() {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        Query query = session.createQuery("from MenuItem m where m.isDeleted=false");
+        List<MenuItem> menuItemList = query.getResultList();
+        session.close();
+        return menuItemList;
+    }
+
+    public boolean checkMenuItem(String menuItemName) {
+        boolean check = true;
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        Query query = session.createQuery("from MenuItem m where m.name=:menuItemName");
+        query.setParameter("menuItemName", menuItemName);
+        List<MenuItem> menuItemList = query.getResultList();
+        session.close();
+        if(menuItemList.isEmpty()){
+            check = false;
+        }
+        return check;
     }
 }

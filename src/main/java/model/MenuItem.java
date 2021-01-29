@@ -31,7 +31,7 @@ public class MenuItem {
     @Column(name = "last_modified_on")
     private LocalDateTime modifiedOn;
     @Column(name = "modified_by")
-    private LocalDateTime modifiedBy;
+    private Integer modifiedBy;
     @Column(name = "is_deleted")
     private Boolean isDeleted;
     @Column(name = "created_on")

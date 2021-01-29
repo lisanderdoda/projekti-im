@@ -25,7 +25,9 @@ public class Employee {
     private String role;
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
+    @ToString.Exclude
     private String username;
+    @ToString.Exclude
     private String password;
     @Column(name = "created_by")
     private Integer createdBy;

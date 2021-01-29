@@ -73,11 +73,11 @@ public class EmployeeController {
             Integer choise = this.scannerExt.scanRestrictedFieldNumber(Arrays.asList(1, 2, 3));
             switch (choise){
                 case 1:
-                    MenuItemController menuItemController = new MenuItemController(scannerExt);
+                    MenuItemController menuItemController = new MenuItemController(scannerExt, getCurrentEmployee());
                     menuItemController.showMenuItem();
                 break;
                 case 2: {
-                    CategoryController categoryController = new CategoryController(scannerExt);
+                    CategoryController categoryController = new CategoryController(scannerExt, getCurrentEmployee());
                     categoryController.showCategoryMenu();
                     break;
                 }
@@ -100,7 +100,7 @@ public class EmployeeController {
             switch (choise){
                 case 1: showManageStaff(); break;
                 case 2: {
-                    TableController tableController = new TableController(scannerExt);
+                    TableController tableController = new TableController(scannerExt,getCurrentEmployee());
                     tableController.showMainMenu();
                     break;
                 }
@@ -120,7 +120,7 @@ public class EmployeeController {
             System.out.println("3.Logout!");
 
             Integer choise = this.scannerExt.scanRestrictedFieldNumber(Arrays.asList(1,2,3));
-            OrderController orderController = new OrderController(scannerExt);
+            OrderController orderController = new OrderController(scannerExt,getCurrentEmployee());
             switch (choise){
                 case 1: orderController.showMyOrders(); break;
                 case 2: orderController.addOrder(); break;
@@ -156,7 +156,7 @@ public class EmployeeController {
     public void listEmployees(){
         System.out.println("Lista e punonjeseve...!");
         employeeRepository.listEmployees().forEach(System.out::println);
-        System.out.println("Zgjidhni nje nga punonjesit nese doni te operoni ose 0 per te shkruar mbrapa!");
+        System.out.println("Zgjidhni nje nga punonjesit nese doni te operoni!");
     }
 
     public void addEmployee(){
@@ -169,27 +169,22 @@ public class EmployeeController {
         String role = this.scannerExt.scanField();
         List<Employee> employeeList = this.employeeRepository.listEmployeesAll();
         boolean ok = true;
-        System.out.println("Te vendosi username:");
-        List<Employee> employees = new ArrayList<>();
-        while (ok){
-
-            String username = this.scannerExt.scanField();
-            employees =employeeList.stream().filter(x->x.getUsername().equals(username))
-                    .collect(Collectors.
-                            toList());
-            if(employees.isEmpty()){
-                employee.setUsername(username);
-                ok=false;
-            }else{
-                System.out.println("Ky Username nuk eshte i disponueshem!");
-                System.out.println("Vendosni nje username tjeter");
+        boolean check = true;
+        String username = "";
+        while (check) {
+            System.out.println("Vendos username:");
+            username = scannerExt.scanField();
+            check = employeeRepository.checkEmployeeUsername(username);
+            if (check) {
+                System.out.println("Username i padisponueshem");
             }
-        }
 
+        }
         System.out.println("Te vendosi passwordin");
         String password = this.scannerExt.scanField();
         System.out.println("dita e lindjes(shembull: 20-01-2000");
         LocalDate localDate = this.scannerExt.scanDateField();
+        employee.setUsername(username);
         employee.setRole(role);
         employee.setFirstName(name);
         employee.setLastName(lastname);
@@ -236,6 +231,8 @@ public class EmployeeController {
         int choise = scannerExt.scanRestrictedFieldNumber(integerList);
         Employee employee = employeeList.get(choise - 1);
         employee.setDeleted(true);
+        employee.setModifiedBy(getCurrentEmployee().getId());
+        employee.setModifiedOn(LocalDate.now());
         this.employeeRepository.editEmployee(employee);
     }
 }
