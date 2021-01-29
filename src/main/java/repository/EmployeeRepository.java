@@ -1,5 +1,6 @@
 package repository;
 
+import model.Category;
 import model.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -13,7 +14,8 @@ public class EmployeeRepository {
     public Employee login(String username, String password){
         Session session = HibernateUtils.getSessionFactory().openSession();
 
-        org.hibernate.query.Query query = session.createQuery("from Employee e where e.username = :usersname and e.password = :password");
+        org.hibernate.query.Query query = session.createQuery("from Employee e where e.username = :usersname " +
+                "and e.password = :password and e.isDeleted=false");
 
         query.setParameter("usersname", username);
 
@@ -62,6 +64,20 @@ public class EmployeeRepository {
         List<Employee> employeeList = query.getResultList();
         session.close();
         return employeeList;
+    }
+
+    public boolean checkEmployeeUsername(String username) {
+
+        boolean check = true;
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        Query query = session.createQuery("from Employee e where e.username=:username");
+        query.setParameter("username", username);
+        List<Employee> employees = query.getResultList();
+        session.close();
+        if (employees.isEmpty()) {
+            check = false;
+        }
+        return check;
     }
 }
 
