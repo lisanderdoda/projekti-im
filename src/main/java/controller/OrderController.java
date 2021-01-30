@@ -8,6 +8,8 @@ import util.ScannerExt;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class OrderController {
 
@@ -45,13 +47,14 @@ public class OrderController {
         }
 
     private void showMyOpenOrders() {
-        this.orderRepository.showMyOpenOrders();
+
+
     }
 
     private void showMyOrdersTakedOn() {
     }
 
-    public void addOrder(){
+    public Order addOrder(){
         Order order = new Order();
         order.setCreatedBy(employee.getId());
         order.setIsDeleted(false);
@@ -61,5 +64,6 @@ public class OrderController {
         Table table = tableController.selctTable();
         order.setTable(table);
         orderRepository.addOrder(order);
+        return order;
     }
 }

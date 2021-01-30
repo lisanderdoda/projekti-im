@@ -1,6 +1,7 @@
 package controller;
 
 import model.Employee;
+import model.Order;
 import model.Table;
 import repository.EmployeeRepository;
 import util.ScannerExt;
@@ -123,7 +124,10 @@ public class EmployeeController {
             OrderController orderController = new OrderController(scannerExt,getCurrentEmployee());
             switch (choise){
                 case 1: orderController.showMyOrders(); break;
-                case 2: orderController.addOrder(); break;
+                case 2: Order order  = orderController.addOrder();
+                MenuItemController menuItemController = new MenuItemController(scannerExt, currentEmployee);
+                menuItemController.selectMenuItem(order);
+                break;
                 case 3: logout = false; break;
                 default: break;
             }

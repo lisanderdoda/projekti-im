@@ -3,6 +3,7 @@ package controller;
 import model.Category;
 import model.Employee;
 import model.MenuItem;
+import model.Order;
 import repository.MenuItemRepository;
 import util.ScannerExt;
 
@@ -18,26 +19,35 @@ public class MenuItemController {
 
     public MenuItemController(ScannerExt scannerExt, Employee employee) {
         this.scannerExt = scannerExt;
-        this.menuItemRepository= new MenuItemRepository();
-        this.employee=employee;
+        this.menuItemRepository = new MenuItemRepository();
+        this.employee = employee;
 
     }
 
     public void showMenuItem() {
         boolean goBack = true;
-        while(goBack){
+        while (goBack) {
             System.out.println("Zgjidhni nje nga opsionet me poshte!");
             System.out.println("1.Shto menu te re!");
             System.out.println("2.Listo menun !");
             System.out.println("3.fshi menu !");
             System.out.println("4.Back!");
-            Integer choise = this.scannerExt.scanRestrictedFieldNumber(Arrays.asList(1,2,3));
-            switch (choise){
-                case 1: addMenuItem(); break;
-                case 2: listMenuItem(); break;  //per tu ndertuar menuja
-                case 3: removeMenuItem(); break;
-                case 4: goBack = false; break;
-                default: break;
+            Integer choise = this.scannerExt.scanRestrictedFieldNumber(Arrays.asList(1, 2, 3));
+            switch (choise) {
+                case 1:
+                    addMenuItem();
+                    break;
+                case 2:
+                    listMenuItem();
+                    break;  //per tu ndertuar menuja
+                case 3:
+                    removeMenuItem();
+                    break;
+                case 4:
+                    goBack = false;
+                    break;
+                default:
+                    break;
             }
         }
     }
@@ -84,7 +94,7 @@ public class MenuItemController {
         double unitPrice = scannerExt.scanDoubleField();
         menuItem.setUnitPrice(unitPrice);
         CategoryController categoryController = new CategoryController(scannerExt, employee);
-        Category category =categoryController.selectCategory();
+        Category category = categoryController.selectCategory();
         menuItem.setCategory(category);
         menuItem.setCreatedBy(employee.getId());
         menuItem.setName(menuItemName);
@@ -92,5 +102,31 @@ public class MenuItemController {
         String description = scannerExt.scanField();
         menuItem.setDescription(description);
         menuItemRepository.addMenuItem(menuItem);
+    }
+
+    public void selectMenuItem(Order order) {
+        List<MenuItem> menuItemList = this.menuItemRepository.listMenuItems();
+        int count = 1;
+        List<Integer> integerList = new ArrayList<>();
+
+        for (MenuItem c : menuItemList) {
+            System.out.println(count + "." + c.getName());
+            integerList.add(count);
+            count++;
+        }
+        boolean ok = true;
+        while (ok) {
+            System.out.println("Zgjidh produktin");
+            int choise = scannerExt.scanRestrictedFieldNumber(integerList);
+            OrderItemController orderItemController = new OrderItemController(scannerExt, employee);
+            orderItemController.addOrderItem(menuItemList.get(choise), order);
+            System.out.println("Zgjidh 1-per te vazhguar ose 2-per te perfunduar prosine");
+            Integer select = this.scannerExt.scanRestrictedFieldNumber(Arrays.asList(1, 2));
+            if (select == 2) {
+                ok = false;
+            }
+
+        }
+
     }
 }

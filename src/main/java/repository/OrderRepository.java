@@ -37,6 +37,12 @@ public class OrderRepository {
     public void removeOrder() {
     }
 
-    public void showMyOpenOrders() {
+    public  List<Object[]> showMyOpenOrders() {
+        Session session = HibernateUtils.getSessionFactory().openSession();
+        Query query = session.createQuery("select t.name, m.name, m.unitPrice, oi.quantity" +
+                " from MenuItem m join m.ordersItems oi join oi.order " +
+                "o join o.table t where o.paidOn is null");
+        List<Object[]> orderTable = query.getResultList();
+        return orderTable;
     }
 }
