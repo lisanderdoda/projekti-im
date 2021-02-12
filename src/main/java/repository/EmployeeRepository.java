@@ -9,13 +9,17 @@ import javax.persistence.Query;
 import java.util.List;
 
 
-public class EmployeeRepository {
+public class EmployeeRepository extends AbstractRepository<Employee>{
+
+    public EmployeeRepository() {
+        this.aClass=Employee.class;
+    }
 
     public Employee login(String username, String password){
         Session session = HibernateUtils.getSessionFactory().openSession();
 
         org.hibernate.query.Query query = session.createQuery("from Employee e where e.username = :usersname " +
-                "and e.password = :password and e.isDeleted=false");
+                "and e.password = :password");
 
         query.setParameter("usersname", username);
 
@@ -34,37 +38,9 @@ public class EmployeeRepository {
         return employee;
     }
 
-    public void addEmployee(Employee employee) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(employee);
-        transaction.commit();
-        session.close();
-    }
-    public void editEmployee(Employee employee){
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.update(employee);
-        transaction.commit();
-        session.close();
-    }
-    public void removeEmployee(String firstname, String lastname) {}
 
-    public List<Employee> listEmployees(){
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        Query query = session.createQuery("from Employee e where e.isDeleted=false");
-        List<Employee> employeeList = query.getResultList();
-        session.close();
-        return employeeList;
-    }
-    // show employye deleted to
-    public List<Employee> listEmployeesAll(){
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        Query query = session.createQuery("from Employee");
-        List<Employee> employeeList = query.getResultList();
-        session.close();
-        return employeeList;
-    }
+
+
 
     public boolean checkEmployeeUsername(String username) {
 
@@ -79,5 +55,7 @@ public class EmployeeRepository {
         }
         return check;
     }
+
+
 }
 

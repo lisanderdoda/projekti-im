@@ -11,30 +11,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 
-public class CategoryRepository {
-
-    public void addCategory(Category category) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(category);
-        transaction.commit();
-        session.close();
+public class CategoryRepository extends AbstractRepository<Category>{
+    public CategoryRepository() {
+        this.aClass=Category.class;
     }
 
-    public void editCategory(Category category) {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        Transaction transaction = session.beginTransaction();
-        session.update(category);
-        transaction.commit();
-        session.close();
-    }
-
-    public void removeCategory() {
-    }
-
-    public Category findByName(String name) {
-        return null;
-    }
 
     public boolean checkCategory(String categoryName) {
         boolean check = true;
@@ -49,12 +30,5 @@ public class CategoryRepository {
         return check;
     }
 
-    public List<Category> listCategoryes() {
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        Query query = session.createQuery("from Category c where c.isDeleted=false");
-        List<Category> categoryList = query.getResultList();
-        session.close();
-        return categoryList;
-    }
 }
 

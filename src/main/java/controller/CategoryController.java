@@ -1,9 +1,9 @@
 package controller;
 
 import model.Category;
-import model.Employee;
 import repository.CategoryRepository;
 import util.ScannerExt;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,12 +12,11 @@ import java.util.List;
 public class CategoryController {
     private final ScannerExt scannerExt;
     private CategoryRepository categoryRepository;
-    private Employee currentEmployee;
 
-    public CategoryController(ScannerExt scannerExt, Employee currentEmployee) {
+    public CategoryController(ScannerExt scannerExt) {
         this.scannerExt = scannerExt;
         this.categoryRepository = new CategoryRepository();
-        this.currentEmployee = currentEmployee;
+
     }
 
     public void showCategoryMenu() {
@@ -26,7 +25,7 @@ public class CategoryController {
             System.out.println("Zgjidhni nje nga opsionet me poshte!");
             System.out.println("1.Shto kategori te re!");
             System.out.println("2.Elemino kategori!");
-            System.out.println("3.Logout!");
+            System.out.println("3.Back!");
 
             Integer choise = this.scannerExt.scanRestrictedFieldNumber(Arrays.asList(1, 2, 3));
             switch (choise) {
@@ -50,7 +49,7 @@ public class CategoryController {
     }
 
     private void removeCategory() {
-        List<Category> categoryList = this.categoryRepository.listCategoryes();
+        List<Category> categoryList = this.categoryRepository.list();
         int count = 1;
         List<Integer> integerList = new ArrayList<>();
 
@@ -63,9 +62,7 @@ public class CategoryController {
         int choise = scannerExt.scanRestrictedFieldNumber(integerList);
         Category category = categoryList.get(choise - 1);
         category.setIsDeleted(true);
-        category.setModifiedBy(currentEmployee.getId());
-        category.setModifiedOn(LocalDateTime.now());
-        this.categoryRepository.editCategory(category);
+        this.categoryRepository.update(category);
     }
 
     public void addCategory() {
@@ -84,13 +81,13 @@ public class CategoryController {
         category.setName(categoryName);
         category.setIsDeleted(false);
         category.setCreatedOn(LocalDateTime.now());
-        category.setCreatedBy(currentEmployee.getId());
-        categoryRepository.addCategory(category);
+        category.setCreatedBy(EmployeeController.getCurrentEmployee().getId());
+        categoryRepository.save(category);
     }
 
 
     public Category selectCategory() {
-        List<Category> categoryList = this.categoryRepository.listCategoryes();
+        List<Category> categoryList = this.categoryRepository.list();
         int count = 1;
         List<Integer> integerList = new ArrayList<>();
 
@@ -105,4 +102,5 @@ public class CategoryController {
 
         return category;
     }
+
 }

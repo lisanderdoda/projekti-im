@@ -13,26 +13,9 @@ import java.util.Set;
 @Entity
 @Table(name = "payments")
 @Data
-public class Payment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_id")
-private Integer id;
+public class Payment extends AbstractEntity{
     @Column(name = "payment_type")
     private String paymentType;
-
-
-
-    @Column(name = "created_by")
-    private Integer createdBy;
-    @Column(name = "last_modified_on")
-    private LocalDateTime modifiedOn;
-    @Column(name = "last_modified_by")
-    private LocalDateTime modifiedBy;
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
-    @Column(name = "created_on")
-    private LocalDateTime createdOn;
     @OneToMany(mappedBy = "payment")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

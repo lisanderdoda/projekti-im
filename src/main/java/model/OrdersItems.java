@@ -11,23 +11,9 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "orders_items")
 @Data
-public class OrdersItems {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "orders_item_id")
-    private Integer ordersItemId;
+public class OrdersItems extends AbstractEntity{
     private Integer quantity;
     private Double price;
-    @Column(name = "created_by")
-    private Integer createdBy;
-    @Column(name = "last_modified_by")
-    private Integer modifiedBy;
-    @Column(name = "last_modified_on")
-    private LocalDate modifiedOn;
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
-    @Column(name = "created_on")
-    private LocalDate createdOn;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_item_id")
     @ToString.Exclude

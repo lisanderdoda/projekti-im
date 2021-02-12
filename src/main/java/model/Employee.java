@@ -14,12 +14,8 @@ import java.util.Set;
 @Entity
 @Table(name = "employees")
 @Data
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employee_id")
+public class Employee extends AbstractEntity{
 
-    private Integer id;
     private String firstName;
     private String lastName;
     private String role;
@@ -29,16 +25,6 @@ public class Employee {
     private String username;
     @ToString.Exclude
     private String password;
-    @Column(name = "created_by")
-    private Integer createdBy;
-    @Column(name = "last_modified_by")
-    private Integer modifiedBy;
-    @Column(name = "last_modified_on")
-    private LocalDate modifiedOn;
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
-    @Column(name = "created_on")
-    private LocalDate createdOn;
     @OneToMany(mappedBy = "employee")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
