@@ -15,12 +15,11 @@ public class OrderController {
 
     private final ScannerExt scannerExt;
     private OrderRepository orderRepository;
-    private Employee employee;
 
-    public OrderController(ScannerExt scannerExt, Employee employee) {
+    public OrderController(ScannerExt scannerExt) {
         this.scannerExt = scannerExt;
         this.orderRepository=new OrderRepository();
-        this.employee= employee;
+
     }
 
     public void showMyOrders(){
@@ -34,7 +33,7 @@ public class OrderController {
                 System.out.println("3.Logout!");
 
                 Integer choise = this.scannerExt.scanRestrictedFieldNumber(Arrays.asList(1,2,3));
-                OrderController orderController = new OrderController(scannerExt,employee);
+                OrderController orderController = new OrderController(scannerExt);
                 switch (choise){
                     case 1:
                     showMyOrdersTakedOn();break;
@@ -56,14 +55,14 @@ public class OrderController {
 
     public Order addOrder(){
         Order order = new Order();
-        order.setCreatedBy(employee.getId());
+        order.setCreatedBy(EmployeeController.getCurrentEmployee().getId());
         order.setIsDeleted(false);
         order.setCreatedOn(LocalDateTime.now());
-        order.setEmployee(employee);
-        TableController tableController = new TableController(scannerExt,employee);
+        order.setEmployee(EmployeeController.getCurrentEmployee());
+        TableController tableController = new TableController(scannerExt);
         Table table = tableController.selctTable();
         order.setTable(table);
-        orderRepository.addOrder(order);
+        orderRepository.save(order);
         return order;
     }
 }

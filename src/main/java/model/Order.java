@@ -13,25 +13,8 @@ import java.util.Set;
 @Entity
 @Table(name = "orders")
 @Data
-public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
-    private Integer orderId;
+public class Order extends AbstractEntity{
 
-
-    @Column(name = "created_by")
-    private Integer createdBy;
-    @Column(name = "last_modified_on")
-    private LocalDateTime modifiedOn;
-    @Column(name = "last_modified_by")
-    private Integer modifiedBy;
-    @Column(name = "is_deleted")
-    private Boolean isDeleted;
-    @Column(name = "created_on")
-    private LocalDateTime createdOn;
-    @Column(name = "paid_on")
-    private LocalDateTime paidOn;
     @OneToMany(mappedBy = "order")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

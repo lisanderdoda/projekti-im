@@ -2,7 +2,6 @@ package controller;
 
 import model.Employee;
 import model.Table;
-import repository.EmployeeRepository;
 import repository.TableRepository;
 import util.ScannerExt;
 
@@ -15,13 +14,11 @@ import java.util.stream.Collectors;
 public class TableController {
 
     private final ScannerExt scannerExt;
-    private Employee employee;
     private TableRepository tableRepository;
 
-    public TableController(ScannerExt scannerExt, Employee employee) {
+    public TableController(ScannerExt scannerExt) {
         this.scannerExt = scannerExt;
-        this. employee=employee;
-        tableRepository=new TableRepository();
+        tableRepository = new TableRepository();
     }
 
     public void showMainMenu() {
@@ -59,7 +56,7 @@ public class TableController {
 
     private void removeTable() {
 
-        List<Table> tableList = tableRepository.tableList();
+        List<Table> tableList = tableRepository.list();
         int count = 1;
         List<Integer> integerList = new ArrayList<>();
 
@@ -72,29 +69,29 @@ public class TableController {
         int choise = scannerExt.scanRestrictedFieldNumber(integerList);
         Table table = tableList.get(choise - 1);
         table.setIsDeleted(true);
-        table.setModifiedBy(employee.getId());
-        table.setModifiedOn(LocalDateTime.now());
-        tableRepository.editTable(table);
+        table.setLastModifiedBy(EmployeeController.getCurrentEmployee().getId());
+        table.setLastModifiedOn(LocalDateTime.now());
+        tableRepository.update(table);
 
     }
 
     private void addTable() {
         TableRepository tableRepository = new TableRepository();
-        List<Table> tables = tableRepository.tableListAll();
+        List<Table> tables = tableRepository.list();
         Table table = new Table();
         boolean ok = true;
 
         List<Table> tables1 = new ArrayList<>();
-        while (ok){
+        while (ok) {
             System.out.println("Vendos emrin e tavolines se re:");
             String name = scannerExt.scanField();
-            tables1 =tables.stream().filter(x->x.getName().equals(name))
+            tables1 = tables.stream().filter(x -> x.getName().equals(name))
                     .collect(Collectors.
                             toList());
-            if(tables1.isEmpty()){
+            if (tables1.isEmpty()) {
                 table.setName(name);
-                ok=false;
-            }else{
+                ok = false;
+            } else {
                 System.out.println("Ky emertim nuk eshte i disponueshem!");
             }
         }
@@ -109,13 +106,13 @@ public class TableController {
         table.setNumberOfSeats(numberOfSeats);
         table.setOccupied(false);
 
-        tableRepository.addTable(table);
+        tableRepository.save(table);
 
     }
 
     public Table selctTable() {
         TableRepository tableRepository = new TableRepository();
-        List<Table> tableList = tableRepository.tableList();
+        List<Table> tableList = tableRepository.list();
         int count = 1;
         List<Integer> integerList = new ArrayList<>();
 
