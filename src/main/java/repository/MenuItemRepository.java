@@ -9,9 +9,11 @@ import javax.persistence.Query;
 import java.util.List;
 
 
+
 public class MenuItemRepository extends AbstractRepository<MenuItem> {
     public MenuItemRepository() {
         this.aClass = MenuItem.class;
+
     }
 
     public boolean checkMenuItem(String menuItemName) {
